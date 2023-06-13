@@ -1,15 +1,16 @@
 type UpdateProp<T, Prop extends keyof T, Updated> = Omit<T, Prop> & Record<Prop, Updated>;
 /**
  * Returns a function that takes a property and a function and returns another function that
- * updates the property in an object by calling a function with the previous value of the property
+ * updates the property in an object by calling a function that is provided with the previous value
+ * of the property
  *
  * @example
  * // Given the property
- * type Wizard = { name: string; magicalObjects: readonly string[] };
- * const john: Wizard = { name: 'John Constantine', magicalObjects: ['Hat', 'Rock', 'House'] };
+ * type Employee = { name: string; magicalObjects: readonly string[] };
+ * const john: Employee = { name: 'John Constantine', magicalObjects: ['Hat', 'Rock', 'House'] };
  *
  * // When doing the update
- * const actual = updateProperty<Wizard>()('magicalObjects', (arr) => arr.length)(john);
+ * const actual = update<Employee>()('magicalObjects', (arr) => arr.length)(john);
  *
  * // Then
  * expect(actual).toEqual({ name: 'John Constantine', magicalObjects: 3 });
@@ -19,6 +20,7 @@ export function update<T extends object>() {
     return (obj: T): UpdateProp<T, Prop, Updated> => ({ ...obj, [prop]: fn(obj[prop]) });
   };
 }
+
 type Employee = {
   id: string;
   salary: number;
